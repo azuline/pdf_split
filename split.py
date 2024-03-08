@@ -28,25 +28,22 @@ def split_pdf_pages(args: argparse.Namespace):
             actual_height = page.mediabox.upper_right[1]
             width = actual_width - args.crop_left - args.crop_right
             height = actual_height - args.crop_top - args.crop_bottom
-            cut_height = height // args.splits
+            cut_width = width // args.splits
 
             for split_num in range(args.splits):
                 split_page = copy(page)
                 split_page.mediabox = copy(page.mediabox)
 
-                left_x = args.crop_left
-                right_x = width + args.crop_left
+                upper_y = args.crop_bottom + height
+                lower_y = args.crop_bottom
 
-                upper_y = min(
-                    args.crop_bottom + height,
-                    args.crop_bottom + args.margin + height - cut_height * split_num,
+                right_x = min(
+                    args.crop_left + width,
+                    args.crop_left + args.margin + width - cut_width * split_num,
                 )
-                lower_y = max(
-                    args.crop_bottom,
-                    args.crop_bottom
-                    - args.margin
-                    + height
-                    - cut_height * (1 + split_num),
+                left_x = max(
+                    args.crop_left,
+                    args.crop_left - args.margin + width - cut_width * (1 + split_num),
                 )
 
                 split_page.mediabox.upper_left = left_x, upper_y

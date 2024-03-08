@@ -39,11 +39,11 @@ def split_pdf_pages(args: argparse.Namespace):
 
                 right_x = min(
                     args.crop_left + width,
-                    args.crop_left + args.margin + width - cut_width * split_num,
+                    args.crop_left + cut_width * (1 + split_num),
                 )
                 left_x = max(
                     args.crop_left,
-                    args.crop_left - args.margin + width - cut_width * (1 + split_num),
+                    args.crop_left + cut_width * split_num,
                 )
 
                 split_page.mediabox.upper_left = left_x, upper_y
@@ -62,9 +62,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("source")
     parser.add_argument("target")
-    parser.add_argument(
-        "--margin", help="additional margin per split", type=int, default=10
-    )
     parser.add_argument(
         "--splits", help="number of splits per page", type=int, default=2
     )
